@@ -1,8 +1,0 @@
-**The Problem**
-Developers are increasingly integrating Large Language Models into their daily workflows for code generation, system design, and debugging, but they are experiencing severe friction due to the ambiguity of natural language. Using plain English to instruct AI systems often results in unpredictable behavior, inconsistent outputs, and hallucinated logic. Developers need deterministic, precise control over the software they build, but communicating complex technical constraints through conversational text is inherently lossy and frustrating.
-
-**Why current solutions are failing**
-Current approaches to "prompt engineering" involve bloated, verbose text templates, fragile conversational hacks, and extensive trial-and-error to coerce models into returning the correct format. These English-based prompts cannot be rigorously tested, linted, or version-controlled like traditional code, and they frequently break when underlying models are updated. There is a fundamental disconnect between the strict, formal requirements of software engineering and the fuzzy, probabilistic nature of chatting with an LLM.
-
-**The Gap**
-There is a clear and immediate market gap for a lightweight CLI tool or micro-framework that provides a formal, code-centric Domain Specific Language (DSL) for interacting with LLMs. Instead of writing paragraphs of English instructions, developers need a tool that lets them define strict constraints, type definitions, and logical flows using a rigorous syntax (akin to the Kotlin creator's new project). This CLI would compile these formal definitions into structured API calls or optimized prompts, effectively turning prompt engineering from an unreliable art into a deterministic, testable engineering discipline.
