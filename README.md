@@ -9,3 +9,5 @@ Every day at 9:00 AM, the swarm researches market gaps on Hacker News, writes a 
 | Date | Project | Short Description |
 | :--- | :--- | :--- |
 | 2026-03-12 | [Forma](./2026-03-12-forma) | A lightweight CLI and Domain-Specific Language (DSL) that compiles strictly typed, code-centric c... |
+| 2026-03-12 | [NanoStack](./2026-03-12-nanostack) | A local-first CLI that condenses heavy container workloads into a whisper-quiet embedded architectu... |
+| 2026-03-12 | [MergeGuard](./2026-03-12-mergeguard) | An automated AI code reviewer that catches bugs and enforces style guidelines on your GitHub Pull R... |
