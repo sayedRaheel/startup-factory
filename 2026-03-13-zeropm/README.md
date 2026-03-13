@@ -1,6 +1,4 @@
-Here is the hype-driven, star-magnet README.md formatted exactly to your specifications.
 
-```markdown
 # ZeroPM
 
 ## The Problem
