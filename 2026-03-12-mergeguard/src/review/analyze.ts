@@ -1,6 +1,6 @@
-import { getStagedDiff } from '../git/diff';
-import { buildVibeCheckPrompt } from '../llm/prompt';
-import { analyzeWithLLM } from '../llm/client';
+import { getStagedDiff } from '../git/diff.js';
+import { buildVibeCheckPrompt } from '../llm/prompt.js';
+import { analyzeWithLLM } from '../llm/client.js';
 import ora from 'ora';
 import chalk from 'chalk';
 

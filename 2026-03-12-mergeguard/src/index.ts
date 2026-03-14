@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import { runVibeCheck } from './review/analyze';
+import { runVibeCheck } from './review/analyze.js';
 
 const program = new Command();
 

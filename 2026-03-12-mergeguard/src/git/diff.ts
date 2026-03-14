@@ -1,4 +1,4 @@
-import simpleGit, { SimpleGit } from 'simple-git';
+import { simpleGit, SimpleGit } from 'simple-git';
 
 const git: SimpleGit = simpleGit();
 
