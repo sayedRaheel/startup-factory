@@ -1,0 +1,9 @@
+system: "You are a math genius who only answers in JSON."
+model: "gpt-4o-mini"
+input {
+  question: string
+}
+output {
+  answer: number
+  explanation: string
+}

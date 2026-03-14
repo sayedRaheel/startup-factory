@@ -7,10 +7,15 @@ export interface CompiledPayload {
 }
 
 export function compileToPayload(ast: FormaAST): CompiledPayload {
-  // Convert AST output schema to JSON Schema for LLM Structured Outputs
   const properties: Record<string, any> = {};
   for (const [key, type] of Object.entries(ast.output)) {
-    properties[key] = { type: type === 'string' ? 'string' : 'object' };
+    // Map basic types
+    let jsonType = 'string';
+    if (type === 'number') jsonType = 'number';
+    if (type === 'boolean') jsonType = 'boolean';
+    if (type === 'object') jsonType = 'object';
+    
+    properties[key] = { type: jsonType };
   }
 
   const jsonSchema = {
@@ -30,8 +35,7 @@ export function compileToPayload(ast: FormaAST): CompiledPayload {
   return {
     model: ast.model || 'gpt-4o',
     messages: [
-      { role: 'system', content: ast.system },
-      // User prompt injection point
+      { role: 'system', content: ast.system }
     ],
     response_format: jsonSchema
   };
