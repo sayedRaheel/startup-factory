@@ -1,0 +1,18 @@
+{
+  "name": "mergeguard-ai",
+  "version": "1.0.0",
+  "description": "An automated AI code reviewer that hooks directly into your Git workflow",
+  "main": "bin/mergeguard.js",
+  "bin": {
+    "mergeguard": "./bin/mergeguard.js"
+  },
+  "keywords": [
+    "ai",
+    "git",
+    "code-review",
+    "openai"
+  ],
+  "author": "Sayed Raheel",
+  "license": "MIT",
+  "dependencies": {}
+}

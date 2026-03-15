@@ -1,0 +1,6 @@
+min_authenticity_score: 75
+fail_on_block: true
+llm_model: "gpt-4o"
+ignore_paths:
+  - "tests/*"
+  - "docs/*"

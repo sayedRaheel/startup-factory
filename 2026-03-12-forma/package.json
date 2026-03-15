@@ -1,0 +1,18 @@
+{
+  "name": "forma-cli",
+  "version": "1.0.0",
+  "description": "A lightweight CLI that compiles constraints into deterministic, production-ready LLM structured outputs.",
+  "main": "bin/forma.js",
+  "bin": {
+    "forma": "./bin/forma.js"
+  },
+  "keywords": [
+    "ai",
+    "json-schema",
+    "structured-output",
+    "openai"
+  ],
+  "author": "Sayed Raheel",
+  "license": "MIT",
+  "dependencies": {}
+}
