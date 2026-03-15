@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+import os
+import sys
+import re
+
+IGNORED_DIRS = {'.git', 'node_modules', '.venv', 'venv', '__pycache__', 'dist', 'build', '.next'}
+TARGET_EXTS = {'.py', '.ts', '.js', '.jsx', '.tsx', '.go', '.rs', '.java', '.cpp', '.hpp', '.c', '.h'}
+
+def generate_tree(dir_path):
+    tree = []
+    for root, dirs, files in os.walk(dir_path):
+        dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
+        level = root.replace(dir_path, '').count(os.sep)
+        indent = ' ' * 4 * level
+        tree.append(f"{indent}{os.path.basename(root)}/")
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            tree.append(f"{subindent}{f}")
+    return '\n'.join(tree)
+
+def extract_signatures(filepath):
+    _, ext = os.path.splitext(filepath)
+    if ext not in TARGET_EXTS:
+        return []
+    
+    signatures = []
+    regexes = [
+        r'^\s*(async\s+)?def\s+',
+        r'^\s*class\s+',
+        r'^\s*(export\s+)?(async\s+)?function\s+',
+        r'^\s*(export\s+)?(const|let|var)\s+\w+\s*=\s*(async\s+)?(\(.*\)|\w+)\s*=>',
+        r'^\s*(export\s+)?interface\s+',
+        r'^\s*(export\s+)?type\s+',
+        r'^\s*func\s+',
+        r'^\s*type\s+.*\s+(struct|interface)',
+        r'^\s*(pub\s+)?(fn|struct|enum|trait|impl)\s+',
+    ]
+    pattern = re.compile('|'.join(regexes))
+    
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                if pattern.match(line):
+                    signatures.append(line.rstrip())
+    except Exception:
+        pass
+    
+    return signatures
+
+def main():
+    target_dir = sys.argv[1] if len(sys.argv) > 1 else '.'
+    target_dir = os.path.abspath(target_dir)
+    
+    print("# 🧠 ctx-surgeon: Codebase Skeleton Extraction")
+    print(f"**Target:** `{target_dir}`\n")
+    
+    print("## 📂 Directory Structure")
+    print("```text")
+    print(generate_tree(target_dir))
+    print("```\n")
+    
+    print("## 🧬 File Signatures")
+    for root, dirs, files in os.walk(target_dir):
+        dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
+        for file in files:
+            ext = os.path.splitext(file)[1]
+            if ext in TARGET_EXTS:
+                filepath = os.path.join(root, file)
+                sigs = extract_signatures(filepath)
+                if sigs:
+                    rel_path = os.path.relpath(filepath, target_dir)
+                    print(f"### `{rel_path}`")
+                    print(f"```{ext.strip('.')}")
+                    for sig in sigs:
+                        print(sig)
+                    print("```\n")
+
+if __name__ == "__main__":
+    main()
