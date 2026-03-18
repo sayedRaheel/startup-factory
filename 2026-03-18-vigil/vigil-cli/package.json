@@ -1,0 +1,13 @@
+{
+  "name": "vigil-cli",
+  "version": "1.0.0",
+  "description": "Vigil CLI Monitor",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "ws": "^8.16.0"
+  }
+}
