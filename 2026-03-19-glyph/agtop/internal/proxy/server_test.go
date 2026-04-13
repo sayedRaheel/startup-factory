@@ -12,7 +12,7 @@ func TestProxy(t *testing.T) {
 	// Mock upstream target server
 	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		w.Write([]byte(`{"usage":{"prompt_tokens":10,"completion_tokens":20}}`))
 	}))
 	defer target.Close()
 
@@ -21,13 +21,15 @@ func TestProxy(t *testing.T) {
 	proxySrv := httptest.NewServer(p)
 	defer proxySrv.Close()
 
-	// Background routine to automatically approve the intercepted request
+	// Background routine to automatically approve both intercepted requests and responses
 	go func() {
-		select {
-		case req := <-p.InterceptChan:
-			req.Approve <- true
-		case <-time.After(2 * time.Second):
-			t.Error("Timeout waiting for interception request")
+		for i := 0; i < 2; i++ {
+			select {
+			case req := <-p.InterceptChan:
+				req.Approve <- true
+			case <-time.After(2 * time.Second):
+				t.Error("Timeout waiting for interception request")
+			}
 		}
 	}()
 

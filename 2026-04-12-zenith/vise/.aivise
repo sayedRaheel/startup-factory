@@ -1,0 +1,3 @@
+language = "rust"
+lint_command = "cargo check"
+strict_rules = ["Never use panic().", "Always add inline documentation for public functions."]

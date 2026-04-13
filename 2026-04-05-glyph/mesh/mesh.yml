@@ -1,0 +1,8 @@
+name: default-swarm
+pipeline:
+    - name: architect
+      command: echo 'Translating prompt to architecture...'
+      env: {}
+    - name: coder
+      command: cat
+      env: {}

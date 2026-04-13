@@ -1,0 +1,1 @@
+/Users/zubair/.openclaw/workspace/swarms/rnd-lab/startup-factory/2026-04-12-zenith/vise/target/debug/vise: /Users/zubair/.openclaw/workspace/swarms/rnd-lab/startup-factory/2026-04-12-zenith/vise/src/main.rs

@@ -1,0 +1,33 @@
+Setting up Warden test environment sandbox...
+Reinitialized existing Git repository in /Users/zubair/.openclaw/workspace/swarms/rnd-lab/startup-factory/2026-04-07-axiom/test_env/.git/
+[main b6ce18f] Initial commit
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Executing Warden firewall over dummy agent...
+2026/04/07 05:06:36 Starting Warden auto-verification loop...
+2026/04/07 05:06:36 Creating ephemeral git worktree at /Users/zubair/.openclaw/workspace/swarms/rnd-lab/startup-factory/2026-04-07-axiom/test_env/.warden/sandbox
+2026/04/07 05:06:36 --- Iteration 1 ---
+2026/04/07 05:06:36 Spawning agent: ./dummy_agent.sh
+Agent Received Prompt: Fix the target.txt file
+Agent iteration 1: Simulating hallucination/bug...
+2026/04/07 05:06:36 Running verification suite: ./test_target.sh
+2026/04/07 05:06:36 Verification failed:
+Test failed: content is still buggy
+2026/04/07 05:06:36 Tests failed. Formatting error trace for next agent iteration...
+2026/04/07 05:06:36 --- Iteration 2 ---
+2026/04/07 05:06:36 Spawning agent: ./dummy_agent.sh
+Agent Received Prompt: Your previous attempt failed. Fix the code to pass the tests.
+
+Original prompt: Fix the target.txt file
+
+Test Error Output:
+Test failed: content is still buggy
+Agent iteration 2: Fixing the file...
+2026/04/07 05:06:36 Running verification suite: ./test_target.sh
+2026/04/07 05:06:36 Tests passed. Merging warden-sandbox-1775552796643520000 into main workspace...
+2026/04/07 05:06:36 Agent task verified and merged successfully.
+2026/04/07 05:06:36 Destroying ephemeral sandbox...
+Validating git merge integrity...
+SUCCESS: Agent bug was fixed and securely merged into main.
+Validating ledger state...
+SUCCESS: Ledger correctly recorded the successful loop.
+All tests completed with Exit Code 0.
