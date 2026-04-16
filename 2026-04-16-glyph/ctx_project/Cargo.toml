@@ -1,0 +1,22 @@
+[package]
+name = "ctx"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4"
+clap = { version = "4.4", features = ["derive"] }
+daemonize = "0.5"
+directories = "5.0"
+notify = "6.1"
+rusqlite = { version = "0.30", features = ["bundled"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Linus's strict optimizations for < 10MB binary
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true          # Link Time Optimization
+codegen-units = 1   # Maximize size reduction
+panic = "abort"     # Strip unwind tables
+strip = true        # Strip symbols
