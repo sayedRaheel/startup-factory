@@ -1,0 +1,7 @@
+port: 8080
+routes:
+  - path: "/v1/test"
+    primary:
+      url: "http://127.0.0.1:8081/fail"
+    fallback:
+      url: "http://127.0.0.1:8081/success"
