@@ -1,0 +1,3 @@
+{"id":1,"jsonrpc":"2.0","result":{"capabilities":{"tools":{}},"protocolVersion":"2024-11-05","serverInfo":{"name":"squelch","version":"1.0.0"}}}
+{"id":2,"jsonrpc":"2.0","result":{"tools":[{"description":"Execute a shell command with smart truncation and secret redaction.","inputSchema":{"properties":{"command":{"type":"string"}},"required":["command"],"type":"object"},"name":"squelched_shell"}]}}
+{"id":3,"jsonrpc":"2.0","result":{"content":[{"text":"STDOUT:\nTesting secret: [REDACTED_SECRET] and short: 123\n\nSTDERR:\n","type":"text"}]}}
