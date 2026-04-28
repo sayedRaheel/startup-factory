@@ -10,3 +10,5 @@
 | 2026-04-16 | [glyph](./2026-04-16-glyph) | ### 3. One-Sentence Pitch |
 | 2026-04-20 | [nexus](./2026-04-20-nexus) | **3. One-sentence Pitch** |
 | 2026-04-24 | [talon](./2026-04-24-talon) | **3. One-sentence Pitch** |
+| 2026-04-23 | [Tether](./2026-04-23-tether) | A zero-config CLI bouncer to lock down AI agent blast radius using Rust and Tree-sitter. |
+| 2026-04-24 | [Squelch](./2026-04-24-squelch) | A fast, statically-compiled Rust MCP server that masks .env secrets and squelches terminal logs. |
