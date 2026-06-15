@@ -1,1 +1,0 @@
-/Users/zubair/.openclaw/workspace/swarms/rnd-lab/startup-factory/2026-04-24-talon/squelch/target/release/squelch: /Users/zubair/.openclaw/workspace/swarms/rnd-lab/startup-factory/2026-04-24-talon/squelch/src/main.rs

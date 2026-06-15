@@ -1,9 +1,0 @@
-system: "You are an expert API designer. Generate API endpoints based on user requirements."
-model: "gpt-4o"
-
-input:
-  user_query: string
-
-output:
-  endpoint: string
-  method: string

@@ -1,8 +1,0 @@
-# Tether Agent Configuration
-stack: Node.js
-strict_mode: true
-context_file: .agent-context.md
-rules:
-  - Do not hallucinate dependencies.
-  - Read .agent-context.md before touching any files.
-  - Follow existing architectural patterns.
