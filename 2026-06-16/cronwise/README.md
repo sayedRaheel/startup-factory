@@ -73,3 +73,7 @@ error: invalid cron expression: value 8 out of range (0-6) in day-of-week field 
 - `@reboot` is intentionally unsupported (it has no fixed schedule to compute).
 - Times are naive/local; no timezone or DST handling.
 - Tested in the sandbox against interval, range, list, named-field, macro, and OR-semantics cases plus a suite of malformed inputs — all behaved as expected.
+
+## Tests & changelog
+
+Run the test suite with `python3 -m unittest test_cronwise -v` (12 cases, standard library only). See `CHANGELOG.md` for release notes.
