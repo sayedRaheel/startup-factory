@@ -52,7 +52,7 @@ _DETECTORS = [
                 r"[\"']?([A-Za-z0-9._\-+/=]{6,})[\"']?")),
     # Credit-card-like 13-16 digit runs (optionally space/dash separated).
     ("credit_card",
-     re.compile(r"\b(?:\d[ -]?){13,16}\b")),
+     re.compile(r"\b(?:\d[ -]?){12,15}\d\b")),
     # Email addresses.
     ("email",
      re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")),
