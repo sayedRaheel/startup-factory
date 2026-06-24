@@ -1,0 +1,3 @@
+{"event":"click","ts":1,"user":"a"}
+{"event":"view","ts":2}
+{"event":"click","ts":3,"user":"b","extra":true}

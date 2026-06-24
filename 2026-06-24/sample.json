@@ -1,0 +1,14 @@
+{
+  "id": 42,
+  "name": "Acme",
+  "active": true,
+  "score": 3.14,
+  "meta": null,
+  "tags": ["a", "b", "c"],
+  "address": {"city": "NYC", "zip": "10001"},
+  "users": [
+    {"sku": "x1", "price": 9.99, "note": "hi"},
+    {"sku": "x2", "price": 19.0},
+    {"sku": "x3", "price": 5.0, "note": "yo"}
+  ]
+}
