@@ -1,0 +1,7 @@
+curl 'https://api.example.com/v1/orders?status=open' \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer eyJ-example-token' \
+  -H 'Accept: application/json' \
+  --data-raw '{"item":"widget","qty":3,"gift":false}' \
+  --compressed
