@@ -10,7 +10,9 @@ Standard library only. Python 3.8+.
 from __future__ import annotations
 
 import argparse
+import csv
 import fnmatch
+import io
 import json
 import os
 import re
@@ -39,6 +41,7 @@ _LEADERS = r"(?:#+|//+|/\*+|\*+|<!--|--|;+|%+)"
 def build_pattern(tags):
     """Compile the scanning regex for the given tag list."""
     alt = "|".join(re.escape(t) for t in tags)
+    # leader, optional space, TAG, optional (author), optional :/-, message
     return re.compile(
         r"%s[ \t]*(?P<tag>%s)\b[ \t]*(?:\((?P<author>[^)]*)\))?[ \t]*[:\-]?[ \t]*(?P<msg>.*)$"
         % (_LEADERS, alt),
@@ -113,6 +116,67 @@ def collect(root, tags, skip_dirs, exclude_globs, follow_symlinks):
     return results
 
 
+# ----------------------------- output formats ------------------------------ #
+
+def render_text(hits, tags, use_color):
+    if not hits:
+        return "No matching comments found.\n"
+    def color(s, code):
+        return "\033[%sm%s\033[0m" % (code, s) if use_color else s
+    order = {t: i for i, t in enumerate(tags)}
+    hits = sorted(hits, key=lambda h: (order.get(h["tag"], 99), h["file"], h["line"]))
+    out = io.StringIO()
+    current = None
+    for h in hits:
+        if h["tag"] != current:
+            current = h["tag"]
+            out.write("\n%s\n" % color(current, "1;33"))
+        loc = "%s:%d" % (h["file"], h["line"])
+        who = " (%s)" % h["author"] if h["author"] else ""
+        msg = h["message"] or "(no description)"
+        out.write("  %s%s  %s\n" % (color(loc, "36"), who, msg))
+    return out.getvalue()
+
+
+def render_markdown(hits, tags):
+    out = io.StringIO()
+    out.write("# TODO report\n\n")
+    if not hits:
+        out.write("No matching comments found.\n")
+        return out.getvalue()
+    out.write("| Tag | Location | Author | Message |\n")
+    out.write("| --- | --- | --- | --- |\n")
+    order = {t: i for i, t in enumerate(tags)}
+    for h in sorted(hits, key=lambda h: (order.get(h["tag"], 99), h["file"], h["line"])):
+        loc = "%s:%d" % (h["file"], h["line"])
+        msg = (h["message"] or "").replace("|", "\\|")
+        out.write("| %s | %s | %s | %s |\n" % (h["tag"], loc, h["author"], msg))
+    return out.getvalue()
+
+
+def render_json(hits):
+    return json.dumps(hits, indent=2) + "\n"
+
+
+def render_csv(hits):
+    out = io.StringIO()
+    w = csv.DictWriter(out, fieldnames=["tag", "file", "line", "author", "message"])
+    w.writeheader()
+    for h in hits:
+        w.writerow({k: h[k] for k in ("tag", "file", "line", "author", "message")})
+    return out.getvalue()
+
+
+def summarize(hits, tags):
+    counts = {}
+    for h in hits:
+        counts[h["tag"]] = counts.get(h["tag"], 0) + 1
+    parts = ["%s=%d" % (t, counts[t]) for t in tags if t in counts]
+    return "Total: %d  (%s)" % (len(hits), ", ".join(parts) if parts else "none")
+
+
+# --------------------------------- cli -------------------------------------- #
+
 def parse_args(argv):
     p = argparse.ArgumentParser(
         prog="todotrack",
@@ -129,8 +193,14 @@ def parse_args(argv):
                    help="glob of files to skip; repeatable (e.g. -e '*.min.js')")
     p.add_argument("--fail-on", default="", metavar="TAGS",
                    help="comma-separated tags that, if found, cause exit code 1")
+    p.add_argument("--no-color", action="store_true",
+                   help="disable ANSI color in text output")
     p.add_argument("--follow-symlinks", action="store_true",
                    help="follow symlinked directories while walking")
+    p.add_argument("--no-summary", action="store_true",
+                   help="suppress the trailing summary line (text format)")
+    p.add_argument("-o", "--output", metavar="FILE",
+                   help="write report to FILE instead of stdout")
     p.add_argument("-V", "--version", action="version",
                    version="%(prog)s " + __version__)
     return p.parse_args(argv)
@@ -151,8 +221,29 @@ def main(argv=None):
     hits = collect(args.path, tags, DEFAULT_SKIP_DIRS, args.exclude,
                    args.follow_symlinks)
 
-    # Stage 2 emits JSON only; richer formats are added in the next stage.
-    sys.stdout.write(json.dumps(hits, indent=2) + "\n")
+    if args.format == "text":
+        use_color = not args.no_color and (
+            args.output is None and sys.stdout.isatty())
+        body = render_text(hits, tags, use_color)
+        if not args.no_summary:
+            body += "\n" + summarize(hits, tags) + "\n"
+    elif args.format == "markdown":
+        body = render_markdown(hits, tags)
+    elif args.format == "json":
+        body = render_json(hits)
+    else:
+        body = render_csv(hits)
+
+    if args.output:
+        try:
+            with open(args.output, "w", encoding="utf-8") as fh:
+                fh.write(body)
+        except OSError as exc:
+            print("todotrack: cannot write %s: %s" % (args.output, exc),
+                  file=sys.stderr)
+            return 2
+    else:
+        sys.stdout.write(body)
 
     fail_tags = {t.strip().upper() for t in args.fail_on.split(",") if t.strip()}
     if fail_tags and any(h["tag"] in fail_tags for h in hits):
