@@ -1,0 +1,12 @@
+{
+  "name": "billing-service",
+  "version": "1.4.0",
+  "port": 8080,
+  "debug": true,
+  "replicas": 2,
+  "tags": ["prod", "payments"],
+  "limits": {
+    "cpu": "500m",
+    "memory": "256Mi"
+  }
+}

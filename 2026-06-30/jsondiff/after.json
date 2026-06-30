@@ -1,0 +1,1 @@
+{"version":"1.5.0","name":"billing-service","port":8080,"replicas":4,"tags":["payments","prod"],"limits":{"memory":"512Mi","cpu":"500m"},"region":"us-east-1"}
