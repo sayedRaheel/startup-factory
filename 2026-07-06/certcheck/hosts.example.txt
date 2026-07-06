@@ -1,0 +1,4 @@
+# example hosts file for certcheck -f
+# one host per line; ports optional
+github.com
+example.com:443
