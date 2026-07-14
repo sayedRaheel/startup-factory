@@ -135,6 +135,16 @@ def format_findings(path_label, text, findings, show_context=True):
     return "\n".join(out)
 
 
+def fix_text(text):
+    """Return text with all offending characters stripped or replaced."""
+    out = []
+    for ch in text:
+        if ch in STRIP:
+            continue
+        out.append(REPLACE.get(ch, ch))
+    return "".join(out)
+
+
 def read_source(path):
     """Read a file as UTF-8 text. Returns (text, None) or (None, error)."""
     try:
@@ -158,11 +168,18 @@ def main(argv=None):
         epilog="Examples:\n"
                "  ghostchars app.py                 # report offenders\n"
                "  ghostchars src/*.js --json        # machine-readable\n"
-               "  cat snippet.py | ghostchars -     # scan stdin\n",
+               "  cat snippet.py | ghostchars -     # scan stdin\n"
+               "  ghostchars app.py --fix           # fix in place (.bak kept)\n"
+               "  pbpaste | ghostchars - --fix      # clean clipboard code\n",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     ap.add_argument("files", nargs="+",
                     help="files to scan, or '-' for stdin")
+    ap.add_argument("--fix", action="store_true",
+                    help="repair files in place (keeps a .bak backup); "
+                         "with '-', write fixed text to stdout")
+    ap.add_argument("--no-backup", action="store_true",
+                    help="with --fix, don't keep .bak backups")
     ap.add_argument("--json", action="store_true",
                     help="output findings as JSON")
     ap.add_argument("-q", "--quiet", action="store_true",
@@ -188,6 +205,23 @@ def main(argv=None):
                 had_error = True
                 continue
         findings = scan_text(text)
+
+        if args.fix:
+            fixed = fix_text(text)
+            if path == "-":
+                sys.stdout.write(fixed)
+            elif findings:
+                p = Path(path)
+                if not args.no_backup:
+                    p.with_suffix(p.suffix + ".bak").write_bytes(
+                        p.read_bytes())
+                p.write_text(fixed, encoding="utf-8")
+                if not args.quiet and not args.json:
+                    print(f"fixed {path}: {len(findings)} character(s) "
+                          f"repaired"
+                          + ("" if args.no_backup else f" (backup: {p}.bak)"),
+                          file=sys.stderr)
+
         if findings:
             all_findings[label] = (text, findings)
 
@@ -199,7 +233,7 @@ def main(argv=None):
             for f in fs:
                 f.pop("char", None)
         print(_json.dumps(payload, indent=2))
-    elif not args.quiet:
+    elif not args.quiet and not args.fix:
         for label, (text, findings) in all_findings.items():
             print(format_findings(label, text, findings,
                                   show_context=not args.no_context))
